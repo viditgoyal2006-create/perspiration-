@@ -1,0 +1,1565 @@
+/* ==========================================================================
+   VIRTUAL LABORATORY: EVALUATION OF LEATHER COLOUR FASTNESS TO PERSPIRATION
+   Professional Slide Deck Architecture & Compact Viewport (Zero Page Scroll)
+   Conforming to ISO 11641:2012 / IUP 15 / SATRA TM426 / ISO 105-E04
+   ========================================================================== */
+
+:root {
+  --bg-workspace: #eef2f6;
+  --bg-slide: #ffffff;
+  --bg-bench: #f8fafc;
+  --border-light: #d0d7de;
+  --border-dark: #8c959f;
+  --border-focus: #0969da;
+  
+  --text-primary: #1f2328;
+  --text-secondary: #424a53;
+  --text-muted: #656d76;
+  --text-inverted: #ffffff;
+
+  --accent-blue: #0969da;
+  --accent-blue-hover: #0856b5;
+  --accent-navy: #0f172a;
+  --accent-green: #1a7f37;
+  --accent-green-bg: #dafbe1;
+  --accent-red: #cf222e;
+
+  --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Zero window scroll: lock body to exact 100vh viewport */
+html, body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  font-family: var(--font-main);
+  background-color: var(--bg-workspace);
+  color: var(--text-primary);
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   Header (Compact)
+   ========================================================================== */
+.deck-header {
+  background-color: var(--accent-navy);
+  color: var(--text-inverted);
+  border-bottom: 2px solid #1e293b;
+  padding: 0.45rem 1.5rem;
+  flex-shrink: 0;
+}
+
+.deck-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.institution-tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.deck-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #f8fafc;
+  margin-top: 0.1rem;
+  line-height: 1.2;
+}
+
+.deck-meta-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.standard-label {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  background: #1e293b;
+  color: #7dd3fc;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid #334155;
+  border-radius: 2px;
+}
+
+.btn-deck-reset {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1px solid #475569;
+  border-radius: 2px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-deck-reset:hover {
+  background: #334155;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   Progress Strip (Compact)
+   ========================================================================== */
+.slide-progress-strip {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-light);
+  padding: 0.25rem 1.5rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  flex-shrink: 0;
+}
+
+.progress-track {
+  display: flex;
+  max-width: 1600px;
+  margin: 0 auto;
+  gap: 0.35rem;
+}
+
+.progress-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0.45rem;
+  border-bottom: 2px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.progress-step.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.progress-step.active {
+  border-bottom-color: var(--accent-blue);
+  background: #f0f7ff;
+}
+
+.progress-step.completed {
+  border-bottom-color: var(--accent-green);
+}
+
+.step-num {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.progress-step.active .step-num {
+  color: var(--accent-blue);
+}
+
+.step-name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.progress-step.active .step-name {
+  color: var(--accent-blue);
+}
+
+/* ==========================================================================
+   Main Deck Container (Fit in 100vh)
+   ========================================================================== */
+.deck-main-container {
+  flex: 1;
+  max-width: 1600px;
+  width: 100%;
+  margin: 0.4rem auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Important for flex child overflow */
+}
+
+.slide-frame {
+  background: var(--bg-slide);
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Top Banner (Compact) */
+.slide-top-banner {
+  padding: 0.5rem 1.25rem;
+  border-bottom: 1px solid var(--border-light);
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.slide-numbering {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+}
+
+.slide-heading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.05rem;
+}
+
+.slide-subheading {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.slide-standard-cite {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: #334155;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 0.25rem 0.6rem;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+/* Split Body */
+.slide-body-split {
+  display: grid;
+  grid-template-columns: 1fr 430px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+  .slide-body-split {
+    grid-template-columns: 1fr 380px;
+  }
+}
+
+/* Workbench Stage */
+.workbench-stage {
+  background-color: var(--bg-bench);
+  border-right: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.bench-header-strip {
+  padding: 0.35rem 1rem;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.bench-viewport {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  position: relative;
+  overflow-y: auto; /* Internal clean scroll if strictly necessary on small screens */
+  min-height: 0;
+}
+
+.bench-grid-surface {
+  position: absolute;
+  inset: 0;
+  background-size: 20px 20px;
+  background-image: 
+    linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+  pointer-events: none;
+}
+
+/* Sidebar: Compact with Internal Auto-Scroll only inside sidebar */
+.control-sidebar {
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.instruction-guide-block {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-light);
+  background: #f8fafc;
+  flex-shrink: 0;
+}
+
+.guide-badge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.guide-pill {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+  background: #e0f2fe;
+  padding: 0.15rem 0.45rem;
+  border-radius: 2px;
+}
+
+.step-status-tag {
+  font-size: 0.66rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+.step-status-tag.locked { color: var(--accent-red); }
+.step-status-tag.unlocked { color: var(--accent-green); }
+
+.guide-procedure-text {
+  font-size: 0.75rem;
+  color: #334155;
+  line-height: 1.35;
+}
+
+/* "What to do" & "How to do" Guide Boxes (Compact) */
+.student-guide-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+}
+
+.guide-pane {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  padding: 0.4rem 0.6rem;
+}
+
+.guide-pane-heading {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.15rem;
+}
+
+.guide-pane.what .guide-pane-heading { color: #0369a1; }
+.guide-pane.how .guide-pane-heading { color: #15803d; }
+
+.guide-pane-body {
+  font-size: 0.74rem;
+  color: #334155;
+  line-height: 1.35;
+}
+
+/* Apparatus Checklist */
+.apparatus-checklist-box {
+  margin-top: 0.45rem;
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  padding: 0.45rem 0.65rem;
+}
+
+.checklist-title {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #475569;
+  margin-bottom: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.checklist-items-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.checklist-item {
+  font-size: 0.7rem;
+  color: #1e293b;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  line-height: 1.25;
+}
+
+.checklist-bullet {
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+
+.item-spec-note {
+  color: #64748b;
+  font-size: 0.64rem;
+  display: block;
+}
+
+/* Action Banner */
+.directed-action-banner {
+  margin-top: 0.45rem;
+  padding: 0.4rem 0.65rem;
+  background: #f0fdf4;
+  border-left: 3px solid var(--accent-green);
+  border-top: 1px solid #bbf7d0;
+  border-right: 1px solid #bbf7d0;
+  border-bottom: 1px solid #bbf7d0;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #166534;
+}
+
+.directed-action-banner.pending {
+  background: #fef2f2;
+  border-left-color: var(--accent-red);
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+/* Controls */
+.interactive-panel {
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  flex: 1;
+}
+
+.panel-section-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.2rem;
+}
+
+.control-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.field-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.field-select {
+  width: 100%;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.76rem;
+  border: 1px solid var(--border-dark);
+  border-radius: 2px;
+  background: #ffffff;
+  color: var(--text-primary);
+  font-family: inherit;
+}
+
+.segmented-toggle {
+  display: flex;
+  border: 1px solid var(--border-dark);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.segmented-item {
+  flex: 1;
+  text-align: center;
+  padding: 0.35rem 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: #f8fafc;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-right: 1px solid var(--border-light);
+  user-select: none;
+  transition: all 0.15s;
+}
+
+.segmented-item:last-child {
+  border-right: none;
+}
+
+.segmented-item.selected {
+  background: var(--accent-blue);
+  color: #ffffff;
+}
+
+/* Action Buttons */
+.btn-action-primary {
+  background: var(--accent-blue);
+  color: #ffffff;
+  border: 1px solid var(--accent-blue);
+  border-radius: 2px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s;
+}
+
+.btn-action-primary:hover:not(:disabled) {
+  background: var(--accent-blue-hover);
+}
+
+.btn-action-primary:disabled {
+  background: #cbd5e1;
+  border-color: #cbd5e1;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.btn-action-secondary {
+  background: #ffffff;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-dark);
+  border-radius: 2px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+}
+
+.btn-action-secondary:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: var(--text-primary);
+}
+
+.btn-action-secondary:disabled {
+  background: #f8fafc;
+  color: #cbd5e1;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+}
+
+/* Telemetry Card */
+.instrument-readout-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  padding: 0.65rem 0.85rem;
+}
+
+.readout-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.readout-value {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.readout-status-line {
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
+  color: #64748b;
+}
+
+.readout-status-line.ok {
+  color: var(--accent-green);
+  font-weight: 600;
+}
+
+.readout-status-line.pending {
+  color: var(--accent-red);
+}
+
+/* Navigation Footer (Compact) */
+.slide-footer-nav {
+  padding: 0.5rem 1.25rem;
+  border-top: 1px solid var(--border-light);
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.slide-counter-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.footer-nav-buttons {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.btn-nav {
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-nav-prev {
+  background: #ffffff;
+  border: 1px solid var(--border-dark);
+  color: var(--text-secondary);
+}
+
+.btn-nav-prev:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.btn-nav-prev:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-nav-next {
+  background: var(--accent-blue);
+  border: 1px solid var(--accent-blue);
+  color: #ffffff;
+}
+
+.btn-nav-next:hover:not(:disabled) {
+  background: var(--accent-blue-hover);
+}
+
+.btn-nav-next:disabled {
+  background: #cbd5e1;
+  border-color: #cbd5e1;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   HIGH CONTRAST WEIGHING CRUCIBLE / BOAT (Clearly Visible Powder Weight)
+   ========================================================================== */
+.weighing-rig-complete {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.25rem;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.realistic-balance-station {
+  width: 320px;
+  background: #e2e8f0;
+  border: 2px solid #94a3b8;
+  border-radius: 4px;
+  padding: 0.85rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  position: relative;
+}
+
+.balance-draft-glass-hood {
+  width: 250px;
+  height: 165px;
+  background: rgba(248, 250, 252, 0.75);
+  border: 2px solid #64748b;
+  border-radius: 2px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 15px;
+  box-shadow: inset 0 0 15px rgba(255,255,255,0.8);
+  overflow: hidden;
+}
+
+.balance-leveling-bubble {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid #475569;
+  background: #a7f3d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bubble-center-dot {
+  width: 3px;
+  height: 3px;
+  background: #047857;
+  border-radius: 50%;
+}
+
+.balance-pan-realistic {
+  width: 110px;
+  height: 12px;
+  background: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 50%, #94a3b8 100%);
+  border: 1px solid #475569;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* High Contrast Ceramic Laboratory Crucible (Glossy Deep Blue/Charcoal with Porcelain Inner) */
+.weighing-boat-realistic {
+  width: 90px;
+  height: 26px;
+  /* Deep glossy royal blue/slate ceramic finish making white salt granules POP OUT with striking clarity! */
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border: 2px solid #38bdf8;
+  border-radius: 0 0 10px 10px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.15);
+}
+
+.crucible-lip-rim {
+  position: absolute;
+  top: -2px;
+  width: 96px;
+  height: 4px;
+  background: #38bdf8;
+  border-radius: 2px;
+}
+
+/* Pure white crystalline salt mound - high contrast against the dark blue crucible */
+.white-powder-crystals {
+  width: 60px;
+  height: 14px;
+  background: radial-gradient(circle at 50% 30%, #ffffff 50%, #f1f5f9 85%, #cbd5e1 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255,255,255,0.9), inset 0 1px 2px rgba(0,0,0,0.2);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Spatula */
+.lab-spatula-visual {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 100px;
+  height: 12px;
+  background: linear-gradient(180deg, #f8fafc 0%, #94a3b8 50%, #64748b 100%);
+  border-radius: 6px 2px 2px 6px;
+  box-shadow: 2px 4px 6px rgba(0,0,0,0.25);
+  transform: rotate(-25deg);
+  transform-origin: right center;
+  transition: all 0.5s ease;
+  z-index: 5;
+}
+
+.spatula-powder-tip {
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 25px;
+  height: 10px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 0 4px #ffffff;
+}
+
+.spatula-pouring-anim {
+  animation: spatulaPour 1.1s forwards;
+}
+
+@keyframes spatulaPour {
+  0% { transform: rotate(-25deg) translate(0, 0); }
+  50% { transform: rotate(-45deg) translate(-25px, 25px); }
+  100% { transform: rotate(-25deg) translate(0, 0); }
+}
+
+.falling-grains-stream {
+  position: absolute;
+  left: 105px;
+  top: 75px;
+  width: 4px;
+  height: 35px;
+  background: repeating-linear-gradient(180deg, #ffffff, #ffffff 3px, transparent 3px, transparent 6px);
+  animation: grainsFall 0.7s infinite linear;
+}
+
+@keyframes grainsFall {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(22px); opacity: 0; }
+}
+
+/* Amber Reagent Bottle */
+.amber-reagent-bottle {
+  width: 58px;
+  height: 110px;
+  background: linear-gradient(90deg, #451a03 0%, #92400e 45%, #78350f 100%);
+  border-radius: 4px 4px 2px 2px;
+  border: 1px solid #291203;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.25);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 12px;
+}
+
+.bottle-stopper {
+  position: absolute;
+  top: -12px;
+  width: 28px;
+  height: 14px;
+  background: #1c1917;
+  border-radius: 3px 3px 0 0;
+  border: 1px solid #44403c;
+}
+
+.bottle-chem-label {
+  width: 48px;
+  background: #fefce8;
+  border: 1px solid #ca8a04;
+  padding: 3px 2px;
+  font-size: 0.52rem;
+  font-family: var(--font-mono);
+  color: #713f12;
+  text-align: center;
+  font-weight: 700;
+  line-height: 1.1;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.balance-display-strip {
+  width: 100%;
+  background: #0f172a;
+  border: 2px solid #334155;
+  border-radius: 2px;
+  padding: 0.45rem 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.balance-vfd-digits {
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+/* pH Meter Setup */
+.ph-measurement-rig {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.25rem;
+}
+
+.ph-benchtop-console {
+  width: 180px;
+  background: #f1f5f9;
+  border: 2px solid #94a3b8;
+  border-radius: 4px;
+  padding: 0.75rem;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ph-console-screen {
+  background: #0f172a;
+  border: 2px solid #475569;
+  border-radius: 2px;
+  padding: 0.55rem;
+  color: #22c55e;
+  font-family: var(--font-mono);
+  text-align: right;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.ph-big-reading {
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ph-screen-meta {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  margin-top: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.beaker-container-realistic {
+  width: 140px;
+  height: 180px;
+  border: 3px solid #64748b;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  background: rgba(240, 249, 255, 0.4);
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.beaker-fluid-body {
+  width: 100%;
+  height: 115px;
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.2) 0%, rgba(14, 165, 233, 0.35) 100%);
+  border-top: 2px solid rgba(14, 165, 233, 0.6);
+  position: relative;
+}
+
+.magnetic-stir-bar {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 7px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.glass-combination-electrode {
+  position: absolute;
+  top: -35px;
+  left: 58px;
+  width: 12px;
+  height: 165px;
+  background: linear-gradient(to right, #64748b, #e2e8f0, #64748b);
+  border: 1px solid #475569;
+  border-radius: 3px;
+  z-index: 3;
+}
+
+.electrode-tip-bulb {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 18px;
+  background: #38bdf8;
+  border-radius: 50%;
+  border: 2px solid #0284c7;
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   APPARATUS VISUALS (Steps 1, 3, 4, 5, 6, 7 Compact Scale)
+   ========================================================================== */
+
+/* Step 1: Specimen Swatches */
+.specimen-stage-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.specimen-pair-canvas {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.realistic-leather-swatch {
+  width: 135px;
+  height: 220px;
+  border-radius: 2px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.22);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border: 1px solid rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+
+.leather-smooth-calf {
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 1px, transparent 1px),
+    radial-gradient(circle at 20% 30%, rgba(0,0,0,0.3) 1px, transparent 1px);
+  background-size: 8px 8px, 12px 12px;
+}
+.leather-pigskin-pores {
+  background-image: 
+    radial-gradient(circle, rgba(0,0,0,0.35) 1.5px, transparent 2px),
+    radial-gradient(circle at 3px 3px, rgba(0,0,0,0.25) 1px, transparent 1.5px);
+  background-size: 14px 14px, 14px 14px;
+}
+.leather-suede-nap {
+  background-image: 
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.06), rgba(255,255,255,0.06) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15) 1px, transparent 1px, transparent 3px);
+  background-size: 4px 4px, 4px 4px;
+}
+.leather-steer-firm {
+  background-image: radial-gradient(circle at 40% 60%, rgba(0,0,0,0.2) 1.2px, transparent 1.5px);
+  background-size: 10px 10px;
+}
+
+.leather-dimension-stamp {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  opacity: 0.85;
+  color: #ffffff;
+  text-shadow: 0 1px 2px #000;
+}
+
+.realistic-multifibre-strip {
+  width: 135px;
+  height: 220px;
+  border: 1px solid #94a3b8;
+  border-radius: 2px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.multifibre-stripe {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.stripe-acetate { background-color: #fafaf9; color: #44403c; }
+.stripe-cotton { background-color: #f8fafc; color: #334155; }
+.stripe-polyamide { background-color: #f1f5f9; color: #0f172a; }
+.stripe-polyester { background-color: #ffffff; color: #475569; }
+.stripe-acrylic { background-color: #fcfcfc; color: #334155; }
+.stripe-wool { background-color: #fefce8; color: #713f12; }
+
+.stitched-composite-visual {
+  width: 200px;
+  height: 240px;
+  border: 1px solid #475569;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: #ffffff;
+}
+
+.seam-stitching-header {
+  height: 20px;
+  background: #0f172a;
+  border-bottom: 2px dashed #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.65rem;
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+}
+
+/* Step 3: Soaking Dish */
+.soaking-bench-assembly {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.crystallization-dish-viewport {
+  width: 350px;
+  height: 180px;
+  border: 4px solid #64748b;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(224,242,254,0.65) 0%, rgba(186,230,253,0.9) 100%);
+  position: relative;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,0.15), 0 5px 12px rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.dish-grad-line {
+  position: absolute;
+  left: 12px;
+  width: 20px;
+  height: 2px;
+  background: #0284c7;
+}
+
+.dish-grad-text {
+  position: absolute;
+  left: 36px;
+  font-size: 0.62rem;
+  font-family: var(--font-mono);
+  color: #0369a1;
+  font-weight: 700;
+}
+
+.glass-stirring-rod-lifelike {
+  position: absolute;
+  right: 45px;
+  top: -15px;
+  width: 11px;
+  height: 215px;
+  background: linear-gradient(90deg, 
+    rgba(255,255,255,0.9) 0%, 
+    rgba(224,242,254,0.6) 30%, 
+    rgba(147,197,253,0.4) 60%, 
+    rgba(255,255,255,0.9) 100%);
+  border: 1px solid rgba(255,255,255,0.8);
+  border-radius: 5px;
+  transform: rotate(22deg);
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.25);
+  cursor: pointer;
+  z-index: 6;
+  transform-origin: top right;
+  transition: all 0.25s ease;
+}
+
+.glass-rod-tip-bead {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.85);
+  border-bottom: 2px solid #94a3b8;
+}
+
+.rod-pressing-action {
+  animation: rodPressTamp 0.5s ease;
+}
+
+@keyframes rodPressTamp {
+  0% { transform: rotate(22deg) translateY(0); }
+  50% { transform: rotate(10deg) translateY(20px); }
+  100% { transform: rotate(22deg) translateY(0); }
+}
+
+.submerged-bubble {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: radial-gradient(circle at 30% 30%, #ffffff 40%, rgba(56,189,248,0.5) 100%);
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.7);
+}
+
+/* Step 4: Perspirometer */
+.perspirometer-frame-visual {
+  width: 310px;
+  background: #e2e8f0;
+  border: 2px solid #64748b;
+  border-radius: 2px;
+  padding: 1.25rem 1rem 1rem;
+  box-shadow: 0 5px 14px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.perspirometer-cross-bridge {
+  width: 270px;
+  height: 22px;
+  background: linear-gradient(180deg, #94a3b8 0%, #475569 100%);
+  border: 1px solid #1e293b;
+  border-radius: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.knurled-locking-nut {
+  width: 24px;
+  height: 24px;
+  background: #d97706;
+  border: 2px solid #78350f;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.knurled-locking-nut.clamped {
+  background: #15803d;
+  border-color: #14532d;
+}
+
+.solid-dead-weight-mass {
+  width: 145px;
+  height: 60px;
+  background: linear-gradient(180deg, #475569 0%, #1e293b 100%);
+  border: 2px solid #0f172a;
+  border-radius: 3px;
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 10px 0;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.acrylic-pack-holder {
+  width: 250px;
+  border: 2px solid #94a3b8;
+  background: #f8fafc;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.acrylic-separator-plate {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #cbd5e1;
+  border-radius: 1px;
+}
+
+.specimen-clamped-layer {
+  height: 18px;
+  background: #334155;
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+/* Step 5: Incubator */
+.incubator-cabinet-view {
+  width: 380px;
+  background: #1e293b;
+  border: 3px solid #0f172a;
+  border-radius: 4px;
+  padding: 1rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pid-controller-bezel {
+  background: #0f172a;
+  border: 2px solid #334155;
+  border-radius: 2px;
+  padding: 0.5rem 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pv-led {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ef4444;
+  text-shadow: 0 0 6px rgba(239, 68, 68, 0.5);
+}
+
+.sv-led {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #22c55e;
+}
+
+.incubator-glass-door {
+  height: 200px;
+  background: radial-gradient(circle, #334155 0%, #1e293b 100%);
+  border: 3px solid #475569;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.wire-shelf-grid {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 16px, rgba(255,255,255,0.06) 16px, rgba(255,255,255,0.06) 18px);
+  pointer-events: none;
+}
+
+/* Step 7: Light Booth & Certificate */
+.light-booth-view {
+  width: 100%;
+  max-width: 650px;
+  background: #737373;
+  border: 4px solid #404040;
+  border-radius: 2px;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.55), 0 5px 14px rgba(0,0,0,0.22);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.booth-luminaire-hood {
+  background: #262626;
+  border-bottom: 2px solid #404040;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #e5e5e5;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+}
+
+.booth-cavity {
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  position: relative;
+}
+
+.viewing-easel-45deg {
+  display: flex;
+  gap: 2rem;
+  background: #525252;
+  border: 2px solid #404040;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
+.sample-holder-aperture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.aperture-mask {
+  width: 125px;
+  height: 185px;
+  background: #525252;
+  border: 1px solid #262626;
+  padding: 10px;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+}
+
+.specimen-swatch-view {
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(0,0,0,0.3);
+}
+
+.iso-greyscale-strip {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 3px;
+  width: 100%;
+}
+
+.iso-grade-chip {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 0.35rem 0.15rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  border-radius: 1px;
+}
+
+.iso-grade-chip:hover {
+  border-color: #0969da;
+}
+
+.iso-grade-chip.selected {
+  border-color: #0969da;
+  background: #eff6ff;
+  box-shadow: 0 0 0 2px #0969da;
+}
+
+.grey-contrast-pair {
+  width: 100%;
+  height: 32px;
+  display: flex;
+  border: 1px solid #737373;
+}
+
+.grey-half-reference { flex: 1; background: #737373; }
+.grey-half-test { flex: 1; }
+
+.grade-text {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.delta-e-text {
+  font-size: 0.58rem;
+  font-family: var(--font-mono);
+  color: #64748b;
+}
+
+.data-table-iso {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+}
+
+.data-table-iso th, .data-table-iso td {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #cbd5e1;
+  text-align: left;
+}
+
+.data-table-iso th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* Final Test Certificate */
+.final-results-certificate {
+  margin-top: 0.75rem;
+  background: #ffffff;
+  border: 2px solid #0f172a;
+  border-radius: 2px;
+  padding: 1rem;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.cert-header {
+  text-align: center;
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.cert-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #0f172a;
+}
+
+.cert-subtitle {
+  font-size: 0.68rem;
+  color: #64748b;
+}
+
+.cert-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  margin-bottom: 0.75rem;
+  background: #f8fafc;
+  padding: 0.55rem;
+  border: 1px solid #e2e8f0;
+}
+
+.verdict-banner-box {
+  padding: 0.65rem;
+  border-radius: 2px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  margin-top: 0.75rem;
+}
+
+.verdict-pass {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 2px solid #10b981;
+}
+
+.verdict-fail {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 2px solid #ef4444;
+}
